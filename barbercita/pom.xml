@@ -61,7 +61,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Bootstrap, iconos y jQuery con webjars (como en clase) -->
+        <!-- Bootstrap, iconos y jQuery con webjars -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>

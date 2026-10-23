@@ -1,0 +1,44 @@
+/* Colores y letra del prototipo de Figma - Navaja Barber Studio */
+body {
+    background-color: #ecebe9;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #1e1e1e;
+}
+
+/* encabezado gris claro con el logo en el centro */
+.encabezado { background-color: #dedad7; }
+.encabezado .nav-link { color: #222; padding: 4px 22px !important; }
+.encabezado .nav-link:hover { font-weight: bold; }
+.logo { height: 55px; }
+
+/* pie de pagina */
+.pie { background-color: #dedad7; font-size: 14px; }
+
+/* portada del inicio */
+.portada {
+    background: url('/img/portada.jpg') center / cover no-repeat;
+    min-height: 75vh;
+    color: #fff;
+}
+.portada h1 { text-shadow: 0 2px 6px rgba(0, 0, 0, .7); font-weight: bold; }
+
+/* banner de nosotros */
+.banner {
+    background: url('/img/banner-nosotros.jpg') center / cover no-repeat;
+    height: 180px;
+}
+.caja-verde { background-color: #9cb48a; border-radius: 8px; }
+.caja-beige { background-color: #c9c3b6; border-radius: 8px; }
+
+/* botones verdes del prototipo */
+.btn-navaja {
+    background-color: #9cb48a;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+}
+.btn-navaja:hover { background-color: #87a274; color: #1e1e1e; }
+
+.titulo { font-weight: bold; }
+.tarjeta { background-color: #fff; border-radius: 10px; }
