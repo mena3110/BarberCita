@@ -14,18 +14,20 @@ body {
 /* pie de pagina */
 .pie { background-color: #dedad7; font-size: 14px; }
 
-/* portada del inicio */
+/* portada del inicio (se oscurece un poco la foto para que se lea el texto) */
 .portada {
-    background: url('/img/portada.jpg') center / cover no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, .35), rgba(0, 0, 0, .35)),
+                url('/img/portada.jpg') center / cover no-repeat;
     min-height: 75vh;
     color: #fff;
 }
 .portada h1 { text-shadow: 0 2px 6px rgba(0, 0, 0, .7); font-weight: bold; }
 
-/* banner de nosotros */
+/* banner de nosotros en blanco y negro como en el Figma */
 .banner {
-    background: url('/img/banner-nosotros.jpg') center / cover no-repeat;
-    height: 180px;
+    background: url('/img/banner-nosotros.png') center / cover no-repeat;
+    height: 280px;
+    filter: grayscale(100%);
 }
 .caja-verde { background-color: #9cb48a; border-radius: 8px; }
 .caja-beige { background-color: #c9c3b6; border-radius: 8px; }
@@ -42,3 +44,14 @@ body {
 
 .titulo { font-weight: bold; }
 .tarjeta { background-color: #fff; border-radius: 10px; }
+
+/* cajas de mision, vision y filosofia como en el Figma */
+.caja-nosotros {
+    width: 75%;
+    min-height: 180px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
