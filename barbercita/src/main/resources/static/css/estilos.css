@@ -55,3 +55,43 @@ body {
     justify-content: center;
     padding: 20px;
 }
+
+
+/* pantalla de reserva (panel oscuro del prototipo de Figma) */
+.fondo-reserva { background-color: #b0aa9f; }
+.panel-reserva { background-color: #141613; color: #eee; border-radius: 12px; overflow: hidden; }
+.panel-reserva .opcion {
+    display: block;
+    border: 1px solid #3b3f38;
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: #eee;
+    text-decoration: none;
+    height: 100%;
+}
+.panel-reserva .opcion:hover { border-color: #9cb48a; }
+.panel-reserva .opcion.elegida { border-color: #9cb48a; background-color: #2b3326; }
+.panel-reserva .hora.elegida { background-color: #9cb48a; color: #111; }
+.panel-reserva .paso { font-size: 12px; letter-spacing: 1px; color: #aaa; text-transform: uppercase; }
+.panel-reserva .text-secondary { color: #a8a8a8 !important; }
+.panel-reserva .precio { color: #9cb48a; font-weight: bold; }
+.panel-reserva .dia { min-width: 70px; }
+.panel-reserva .total { font-size: 24px; font-weight: bold; }
+.panel-reserva .etiqueta { font-size: 10px; letter-spacing: 1px; color: #aaa; text-transform: uppercase; display: block; }
+.panel-reserva .icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #2b3326;
+    color: #9cb48a;
+    margin-right: 10px;
+}
+.resumen { border-left: 1px solid #3b3f38; }
+
+/* columna izquierda con la foto y nuestro enfoque */
+.enfoque { background-color: #0d0e0c; border-right: 1px solid #3b3f38; }
+.enfoque img { width: 100%; height: 220px; object-fit: cover; }
+.enfoque h4 { font-weight: bold; }
