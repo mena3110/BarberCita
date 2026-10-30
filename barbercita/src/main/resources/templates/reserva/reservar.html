@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos ::head}" ></head>
+    <body class="fondo-reserva">
+        <header th:replace="~{general/fragmentos ::header}" ></header>
+
+        <!-- HU-07 Reservar una cita (pantalla oscura del prototipo de Figma) -->
+        <section class="container py-5">
+            <h2 class="titulo text-white mb-4">[[#{reserva.titulo}]] <span class="text-dark">[[#{reserva.titulo2}]]</span></h2>
+            <div class="panel-reserva row g-0">
+                <!-- Columna izquierda: foto y nuestro enfoque -->
+                <div class="col-lg-3 enfoque">
+                    <section th:replace="~{reserva/fragmentos :: enfoque}"></section>
+                </div>
+                <!-- Centro: pasos 01, 02 y 03 -->
+                <div class="col-lg-6 p-4">
+                    <section th:replace="~{reserva/fragmentos :: servicios}"></section>
+                    <section th:replace="~{reserva/fragmentos :: barberos}"></section>
+                    <section th:replace="~{reserva/fragmentos :: agenda}"></section>
+                </div>
+                <!-- Derecha: resumen y confirmar -->
+                <div class="col-lg-3 p-4 resumen">
+                    <section th:replace="~{reserva/fragmentos :: resumen}"></section>
+                </div>
+            </div>
+        </section>
+
+        <section th:replace="~{general/fragmentos :: mostrarToast}" ></section>
+        <footer th:replace="~{general/fragmentos ::footer}" ></footer>
+    </body>
+</html>

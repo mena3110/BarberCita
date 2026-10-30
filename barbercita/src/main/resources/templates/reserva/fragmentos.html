@@ -1,0 +1,144 @@
+<!-- Fragmento #1 columna izquierda con la foto y nuestro enfoque -->
+<section th:fragment="enfoque">
+    <img th:src="@{/img/reserva.png}" alt="Navaja Barber Studio"/>
+    <div class="p-4">
+        <p class="paso">[[#{reserva.enfoque}]]</p>
+        <h4>[[#{reserva.enfoqueTitulo}]]</h4>
+        <small class="text-secondary">[[#{reserva.enfoqueTexto}]]</small>
+        <ul class="list-unstyled mt-3 small">
+            <li class="mb-2"><i class="fa-solid fa-check me-2"></i>[[#{reserva.check1}]]</li>
+            <li class="mb-2"><i class="fa-solid fa-check me-2"></i>[[#{reserva.check2}]]</li>
+            <li class="mb-2"><i class="fa-solid fa-check me-2"></i>[[#{reserva.check3}]]</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Fragmento #2 paso 01: los servicios activos -->
+<section th:fragment="servicios" class="mb-4">
+    <p class="paso">[[#{reserva.paso1}]]</p>
+    <div th:if="${servicios == null or servicios.empty}" class="text-secondary">[[#{lista.vacia}]]</div>
+    <div class="row g-3">
+        <div class="col-md-4" th:each="s : ${servicios}">
+            <a class="opcion"
+               th:classappend="${servicioElegido != null and servicioElegido.idServicio == s.idServicio} ? 'elegida'"
+               th:href="@{/cliente/reservar(servicio=${s.idServicio}, barbero=${barberoElegido?.idBarbero}, fecha=${fechaElegida})}">
+                <div class="d-flex justify-content-between">
+                    <span class="fw-bold">[[${s.nombre}]]</span>
+                    <span class="precio">₡[[${#numbers.formatDecimal(s.precio, 1, 'POINT', 0, 'COMMA')}]]</span>
+                </div>
+                <small class="text-secondary d-block">[[${s.descripcion}]]</small>
+                <small class="text-secondary d-block">[[${s.duracionMin}]] min</small>
+                <small class="precio d-block mt-1" th:if="${servicioElegido != null and servicioElegido.idServicio == s.idServicio}">
+                    <i class="fa-regular fa-circle-check"></i> [[#{reserva.seleccionado}]]
+                </small>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Fragmento #3 paso 02: los barberos que hacen el servicio escogido -->
+<section th:fragment="barberos" class="mb-4">
+    <p class="paso">[[#{reserva.paso2}]]</p>
+    <!-- primero tiene que escoger un servicio -->
+    <p class="text-secondary" th:if="${servicioElegido == null}">[[#{reserva.primeroServicio}]]</p>
+    <div th:if="${servicioElegido != null and barberos.empty}" class="text-secondary">[[#{lista.vacia}]]</div>
+    <div class="row g-3" th:if="${servicioElegido != null}">
+        <div class="col-md-4" th:each="b : ${barberos}">
+            <a class="opcion"
+               th:classappend="${barberoElegido != null and barberoElegido.idBarbero == b.idBarbero} ? 'elegida'"
+               th:href="@{/cliente/reservar(servicio=${servicioElegido?.idServicio}, barbero=${b.idBarbero}, fecha=${fechaElegida})}">
+                <i class="fa-solid fa-user me-1"></i>
+                <span class="fw-bold">[[${b.usuario.nombre}]]</span>
+                <i class="fa-solid fa-check float-end precio"
+                   th:if="${barberoElegido != null and barberoElegido.idBarbero == b.idBarbero}"></i>
+                <small class="text-secondary d-block">[[${b.especialidad}]]</small>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Fragmento #4 paso 03: los proximos dias y las horas libres -->
+<section th:fragment="agenda" class="mb-2">
+    <div class="d-flex justify-content-between">
+        <p class="paso">[[#{reserva.paso3}]]</p>
+        <small class="text-secondary text-capitalize">[[${#temporals.format(dias[0], 'MMMM yyyy')}]]</small>
+    </div>
+    <div class="d-flex flex-wrap gap-2 mb-3">
+        <a th:each="d : ${dias}" class="opcion dia text-center"
+           th:classappend="${d == fechaElegida} ? 'elegida'"
+           th:href="@{/cliente/reservar(servicio=${servicioElegido?.idServicio}, barbero=${barberoElegido?.idBarbero}, fecha=${d})}">
+            <small class="d-block text-secondary text-uppercase">[[${#temporals.format(d, 'EEE')}]]</small>
+            <span class="fw-bold fs-5">[[${#temporals.format(d, 'dd')}]]</span>
+        </a>
+    </div>
+
+    <!-- todavia no escoge servicio, barbero y dia -->
+    <p class="text-secondary" th:if="${servicioElegido == null or barberoElegido == null or fechaElegida == null}">
+        [[#{reserva.escoger}]]
+    </p>
+    <!-- ya escogio todo pero el barbero no tiene espacio -->
+    <p class="text-secondary" th:if="${servicioElegido != null and barberoElegido != null and fechaElegida != null and horas.empty}">
+        [[#{reserva.sinHorarios}]]
+    </p>
+    <div class="d-flex flex-wrap gap-2">
+        <a th:each="h : ${horas}" class="btn btn-outline-light btn-sm hora"
+           th:classappend="${h == horaElegida} ? 'elegida'"
+           th:href="@{/cliente/reservar(servicio=${servicioElegido.idServicio}, barbero=${barberoElegido.idBarbero}, fecha=${fechaElegida}, hora=${h})}">
+            [[${#temporals.format(h, 'HH:mm')}]]
+        </a>
+    </div>
+</section>
+
+<!-- Fragmento #5 resumen de la reserva y boton de confirmar -->
+<section th:fragment="resumen">
+    <h5>[[#{reserva.resumen}]]</h5>
+    <small class="text-secondary">[[#{reserva.revisar}]]</small>
+    <ul class="list-unstyled mt-4">
+        <li class="d-flex align-items-center mb-3">
+            <span class="icono"><i class="fa-solid fa-scissors"></i></span>
+            <div><span class="etiqueta">[[#{reserva.servicio}]]</span>
+                <strong th:text="${servicioElegido?.nombre} ?: '-'"></strong></div>
+        </li>
+        <li class="d-flex align-items-center mb-3">
+            <span class="icono"><i class="fa-regular fa-user"></i></span>
+            <div><span class="etiqueta">[[#{reserva.profesional}]]</span>
+                <strong th:text="${barberoElegido?.usuario?.nombre} ?: '-'"></strong></div>
+        </li>
+        <li class="d-flex align-items-center mb-3">
+            <span class="icono"><i class="fa-regular fa-calendar"></i></span>
+            <div><span class="etiqueta">[[#{reserva.fecha}]]</span>
+                <strong class="text-capitalize"
+                        th:text="${fechaElegida != null} ? ${#temporals.format(fechaElegida, 'EEEE d MMMM')} : '-'"></strong></div>
+        </li>
+        <li class="d-flex align-items-center mb-3">
+            <span class="icono"><i class="fa-regular fa-clock"></i></span>
+            <div><span class="etiqueta">[[#{reserva.hora}]]</span>
+                <strong th:text="${horaElegida != null} ? ${#temporals.format(horaElegida, 'HH:mm')} + ' · ' + ${servicioElegido.duracionMin} + ' min' : '-'"></strong></div>
+        </li>
+    </ul>
+    <hr/>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <span class="text-secondary">[[#{reserva.total}]]</span>
+        <strong class="total"
+                th:text="${servicioElegido != null} ? '₡' + ${#numbers.formatDecimal(servicioElegido.precio, 1, 'POINT', 0, 'COMMA')} : '-'"></strong>
+    </div>
+
+    <!-- solo se puede confirmar cuando ya escogio todo -->
+    <form th:action="@{/cliente/reservar/confirmar}" method="post"
+          th:if="${servicioElegido != null and barberoElegido != null and fechaElegida != null and horaElegida != null}">
+        <input type="hidden" name="servicio" th:value="${servicioElegido.idServicio}"/>
+        <input type="hidden" name="barbero" th:value="${barberoElegido.idBarbero}"/>
+        <input type="hidden" name="fecha" th:value="${fechaElegida}"/>
+        <input type="hidden" name="hora" th:value="${horaElegida}"/>
+        <button type="submit" class="btn btn-navaja w-100">
+            [[#{reserva.confirmar}]] <i class="fa-solid fa-arrow-right ms-2"></i>
+        </button>
+    </form>
+    <button class="btn btn-navaja w-100" disabled
+            th:unless="${servicioElegido != null and barberoElegido != null and fechaElegida != null and horaElegida != null}">
+        [[#{reserva.confirmar}]]
+    </button>
+    <small class="d-block text-center text-secondary mt-2">
+        <i class="fa-solid fa-lock me-1"></i>[[#{reserva.guardaLugar}]]
+    </small>
+</section>
