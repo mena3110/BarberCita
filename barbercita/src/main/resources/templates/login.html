@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos ::head}" ></head>
+    <body class="fondo-reserva">
+        <header th:replace="~{general/fragmentos ::header}" ></header>
+
+        <!-- Persona 1: inicio de sesion con el mismo estilo de la pantalla de reserva -->
+        <section class="container py-5">
+            <div class="contenedor-login mx-auto">
+                <h2 class="titulo text-white mb-4">[[#{login.titulo}]] <span class="text-dark">[[#{login.titulo2}]]</span></h2>
+                <div class="panel-reserva panel-login row g-0">
+                    <!-- Columna izquierda: foto y texto de bienvenida -->
+                    <div class="col-md-5 enfoque">
+                        <img th:src="@{/img/reserva.png}" alt="Navaja Barber Studio"/>
+                        <div class="p-4">
+                            <p class="paso">[[#{login.bienvenida}]]</p>
+                            <h4>[[#{login.frase}]]</h4>
+                            <small class="text-secondary">[[#{login.texto}]]</small>
+                        </div>
+                    </div>
+
+                    <!-- Columna derecha: formulario -->
+                    <div class="col-md-7 p-4 p-lg-5">
+                        <p class="paso">[[#{login.paso}]]</p>
+                        <h5 class="mb-1">[[#{login.subtitulo}]]</h5>
+                        <small class="text-secondary">[[#{login.indicacion}]]</small>
+
+                        <!-- Mensajes segun lo que paso en el login -->
+                        <div th:if="${param.error}" class="aviso aviso-error mt-3">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i>[[#{login.error}]]
+                        </div>
+                        <div th:if="${param.inactivo}" class="aviso aviso-error mt-3">
+                            <i class="fa-solid fa-user-lock me-2"></i>[[#{login.inactivo}]]
+                        </div>
+                        <div th:if="${param.logout}" class="aviso aviso-ok mt-3">
+                            <i class="fa-solid fa-square-check me-2"></i>[[#{login.salida}]]
+                        </div>
+
+                        <form th:action="@{/login}" method="post" class="mt-4">
+                            <div class="mb-3">
+                                <label for="correo" class="etiqueta mb-1">[[#{login.correo}]]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-regular fa-envelope"></i></span>
+                                    <input type="email" id="correo" name="correo" class="form-control"
+                                           th:placeholder="#{login.correo.ejemplo}" required autofocus/>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="etiqueta mb-1">[[#{login.password}]]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                    <input type="password" id="password" name="password" class="form-control" required/>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-navaja w-100">
+                                [[#{login.boton}]] <i class="fa-solid fa-arrow-right ms-2"></i>
+                            </button>
+                        </form>
+                        <small class="d-block text-center text-secondary mt-3">
+                            <i class="fa-solid fa-scissors me-1"></i>[[#{login.nota}]]
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="~{general/fragmentos ::footer}" ></footer>
+    </body>
+</html>
