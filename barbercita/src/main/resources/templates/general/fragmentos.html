@@ -14,6 +14,7 @@
 
 <!-- Fragmento #2 define el encabezado de las paginas: logo y menu del prototipo de Figma -->
 <!-- La Persona 1 agrega aqui el menu segun el rol (HU-02) -->
+<!-- Persona 1: el menu cambia si el usuario inicio sesion y segun su rol -->
 <header th:fragment="header" class="encabezado pt-3 pb-2">
     <div class="container text-center">
         <a th:href="@{/}"><img th:src="@{/img/logo.png}" alt="Navaja Barber Studio" class="logo"/></a>
@@ -26,9 +27,33 @@
                     <li class="nav-item"><a class="nav-link" th:href="@{/}">[[#{plantilla.inicio}]]</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">[[#{plantilla.nosotros}]]</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/servicios}">[[#{plantilla.servicios}]]</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/cliente/citas}">[[#{plantilla.miscitas}]]</a></li>
+                    <!-- Mis citas solo para clientes (o para invitar a iniciar sesion) -->
+                    <li class="nav-item" sec:authorize="isAnonymous() or hasRole('CLIENTE')"><a class="nav-link" th:href="@{/cliente/citas}">[[#{plantilla.miscitas}]]</a></li>
+                    <!-- Opcion solo para el administrador -->
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:href="@{/admin/servicio/listado}">[[#{plantilla.admin}]]</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">[[#{plantilla.contacto}]]</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/login}">[[#{plantilla.iniciarSesion}]]</a></li>
+                    <!-- Si no ha iniciado sesion se muestra el enlace al login -->
+                    <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" th:href="@{/login}">[[#{plantilla.iniciarSesion}]]</a></li>
+                    <!-- Si ya inicio sesion se muestra su nombre y la opcion de salir -->
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                            <img th:if="${session.usuarioFoto != null and !#strings.isEmpty(session.usuarioFoto)}"
+                                 th:src="${session.usuarioFoto}" alt="" class="foto-usuario me-1"/>
+                            <i th:unless="${session.usuarioFoto != null and !#strings.isEmpty(session.usuarioFoto)}" class="fa-regular fa-user me-1"></i>
+                            <span th:text="${session.usuarioNombre} ?: ${#authentication.name}"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><span class="dropdown-item-text small text-secondary" sec:authentication="name"></span></li>
+                            <li><hr class="dropdown-divider"/></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fa-solid fa-right-from-bracket me-1"></i>[[#{plantilla.cerrarSesion}]]
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                             <i class="fa-solid fa-globe"></i></a>

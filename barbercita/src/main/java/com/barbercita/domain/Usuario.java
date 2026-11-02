@@ -40,4 +40,19 @@ public class Usuario implements Serializable {
     private boolean activo;
 
     //Persona 1 agrega aqui el rol, el password y la foto para el login
+
+    //Rol del usuario: CLIENTE, BARBERO o ADMIN
+    @Column(length = 20)
+    @Size(max = 20)
+    private String rol;
+
+    //La contrasena se guarda encriptada con BCrypt
+    @Column(length = 512)
+    @Size(max = 512)
+    private String password;
+
+    //Ruta de la foto del usuario (es opcional)
+    @Column(length = 1024)
+    @Size(max = 1024)
+    private String foto;
 }

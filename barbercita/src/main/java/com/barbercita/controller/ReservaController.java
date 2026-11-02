@@ -91,11 +91,8 @@ public class ReservaController {
             Principal principal,
             RedirectAttributes redirectAttributes) {
 
-        //TEMPORAL: mientras Persona 1 agrega el login se usa el cliente de prueba
-        String correo = "cliente@barbercita.com";
-        if (principal != null) {
-            correo = principal.getName();
-        }
+        //Obtener el correo del usuario que inicio sesion
+        String correo = principal.getName();
 
         String titulo = "todoOk";
         String mensaje = "reserva.ok";
