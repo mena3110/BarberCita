@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Credenciales de Firebase (cada uno las configura localmente) ###
+src/main/resources/firebase/*.json

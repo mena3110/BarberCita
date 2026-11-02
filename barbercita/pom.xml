@@ -109,6 +109,16 @@
         </dependency>
 
         <!-- Despues se agrega: seguridad (Persona 1) y Firebase (imagenes) -->
+
+        <!-- Seguridad para el login y los roles (Persona 1) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
