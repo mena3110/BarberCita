@@ -20,63 +20,57 @@ public class AgendaService {
     private final BarberoRepository barberoRepository;
     private final CitaRepository citaRepository;
 
-// @Transactional(readOnly = true)
-//public List<Cita> getAgendaDia(
-//        String correo,
-//        LocalDate fecha) {
-//
-//    Barbero barbero = barberoRepository
-//            .findByUsuarioCorreo(correo)
-//            .orElseThrow(() ->
-//                    new IllegalArgumentException(
-//                            "Barbero no encontrado"));
-//
-//    List<Cita> citas =
-//            citaRepository
-//                    .findByBarberoIdBarberoAndFechaAndEstadoNot(
-//                            barbero.getIdBarbero(),
-//                            fecha,
-//                            "Cancelada");
-//
-//    citas.sort(Comparator.comparing(Cita::getHora));
-//
-//    return citas;
-//} metodo original que queda luego que se programe la autenticación
-    
-  @Transactional(readOnly = true)
-public List<Cita> getAgendaDia(
-        String correo,
-        LocalDate fecha) {
+    @Transactional(readOnly = true)
+    public List<Cita> getAgendaDia(
+            String correo,
+            LocalDate fecha) {
 
-    Integer idBarbero = 3; // temporal
+        Barbero barbero = barberoRepository
+                .findByUsuarioCorreo(correo)
+                .orElseThrow(()
+                        -> new IllegalArgumentException(
+                                "Barbero no encontrado"));
 
-    List<Cita> citas =
-            citaRepository
-                    .findByBarberoIdBarberoAndFechaAndEstadoNot(
-                            idBarbero,
-                            fecha,
-                            "Cancelada");
+        List<Cita> citas
+                = citaRepository
+                        .findByBarberoIdBarberoAndFechaAndEstadoNot(
+                                barbero.getIdBarbero(),
+                                fecha,
+                                "Cancelada");
 
-    citas.sort(Comparator.comparing(Cita::getHora));
+        citas.sort(Comparator.comparing(Cita::getHora));
 
-    return citas;
+        return citas;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Cita> getProximaCita(String correo) {
+
+        LocalTime ahora = LocalTime.now();
+
+        List<Cita> citas
+                = getAgendaDia(
+                        correo,
+                        LocalDate.now());
+
+        return citas.stream()
+                .filter(c -> c.getHora().isAfter(ahora))
+                .min(Comparator.comparing(Cita::getHora));
+    }
+
+ 
+@Transactional
+public void actualizarEstado(
+        Integer idCita,
+        String estado) {
+
+    Cita cita = citaRepository
+            .findById(idCita)
+            .orElseThrow(() ->
+                    new IllegalArgumentException("Cita no encontrada"));
+
+    cita.setEstado(estado);
+
+    citaRepository.save(cita);
 }
-
-@Transactional(readOnly = true)
-public Optional<Cita> getProximaCita(String correo) {
-
-    LocalTime ahora = LocalTime.now();
-
-    List<Cita> citas =
-            getAgendaDia(
-                    correo,
-                    LocalDate.now());
-
-    return citas.stream()
-            .filter(c -> c.getHora().isAfter(ahora))
-            .min(Comparator.comparing(Cita::getHora));
-}
-    
-            
-            
 }
