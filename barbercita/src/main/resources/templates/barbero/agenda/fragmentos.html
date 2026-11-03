@@ -6,19 +6,19 @@
                 Detalle de las citas agendadas para el día
             </p>
             <div class="text-end mb-3">
-    <form method="get"
-          th:action="@{/barbero/agenda}">
-        <input type="date"
-               name="fecha"
-               class="form-control d-inline-block w-auto"
-               th:value="${fechaSeleccionada}">
+                <form method="get"
+                      th:action="@{/barbero/agenda}">
+                    <input type="date"
+                           name="fecha"
+                           class="form-control d-inline-block w-auto"
+                           th:value="${fechaSeleccionada}">
 
-        <button type="submit"
-                class="btn btn-dark btn-sm">
-            Consultar
-        </button>
-    </form>
-</div>
+                    <button type="submit"
+                            class="btn btn-dark btn-sm">
+                        Consultar
+                    </button>
+                </form>
+            </div>
 
         </div>
         <div class="row">
@@ -74,41 +74,169 @@
                     </div>
                 </div>
                 <div th:each="cita : ${citas}"
-                     class="card mb-3 shadow-sm">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-2">
-                                <strong th:text="${cita.hora}">
-                                </strong>
-                            </div>      
-                            <div class="col-md-4">
-                                <span th:text="${cita.cliente.nombre}">
-                                    Cliente
-                                </span>
-                            </div>
-                            <div class="col-md-3">
-                                <span th:text="${cita.servicio.nombre}">
-                                    Servicio
-                                </span>
-                            </div>
-                            <div class="col-md-3 text-end">
-                                <span th:if="${cita.estado == 'Pendiente'}"
-                                      class="badge bg-warning text-dark">
-                                    Pendiente
-                                </span>
-                                <span th:if="${cita.estado == 'Atendida'}"
-                                      class="badge bg-success">
-                                    Atendida
-                                </span>
-                                <span th:if="${cita.estado == 'Cancelada'}"
-                                      class="badge bg-danger">
-                                    Cancelada
-                                </span>
+                     class="fila-cita"
+                     data-bs-toggle="modal"
+                     data-bs-target="#modalCita"
+
+                     th:data-id="${cita.idCita}"
+                     th:data-cliente="${cita.cliente.nombre}"
+                     th:data-servicio="${cita.servicio.nombre}"
+                     th:data-fecha="${#temporals.format(cita.fecha,'dd/MM/yyyy')}"
+                     th:data-hora="${cita.hora}"
+                     th:data-estado="${cita.estado}">
+
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <strong th:text="${cita.hora}">
+                                    </strong>
+                                </div>      
+                                <div class="col-md-4">
+                                    <span th:text="${cita.cliente.nombre}">
+                                        Cliente
+                                    </span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span th:text="${cita.servicio.nombre}">
+                                        Servicio
+                                    </span>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <span th:if="${cita.estado == 'Pendiente'}"
+                                          class="badge bg-warning text-dark">
+                                        Pendiente
+                                    </span>
+                                    <span th:if="${cita.estado == 'Atendida'}"
+                                          class="badge bg-success">
+                                        Atendida
+                                    </span>
+                                    <span th:if="${cita.estado == 'Cancelada'}"
+                                          class="badge bg-danger">
+                                        Cancelada
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
         </div>  
-    </div>  
-</section>
+        <div class="modal fade"
+             id="modalCita"
+             tabindex="-1"
+             aria-hidden="true">
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Detalle de la cita
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                        </button>
+                    </div>
+
+                   <form th:action="@{/barbero/agenda/cita/actualizarEstado}" method="post">
+
+
+                        <input type="hidden"
+                               id="idCitaModal"
+                               name="idCita">
+
+                        <div class="modal-body">
+
+                            <p>
+                                <strong>Cliente:</strong>
+                                <span id="clienteModal"></span>
+                            </p>
+
+                            <p>
+                                <strong>Servicio:</strong>
+                                <span id="servicioModal"></span>
+                            </p>
+
+                            <p>
+                                <strong>Fecha:</strong>
+                                <span id="fechaModal"></span>
+                            </p>
+
+                            <p>
+                                <strong>Hora:</strong>
+                                <span id="horaModal"></span>
+                            </p>
+
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Estado
+                                </label>
+
+                                <select id="estadoModal"
+                                        name="estado"
+                                        class="form-select">
+
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Atendida">Atendida</option>
+                                    <option value="Cancelada">Cancelada</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                Cerrar
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+
+                    const filas = document.querySelectorAll(".fila-cita");
+
+                    filas.forEach(fila => {
+
+                        fila.addEventListener("click", function () {
+
+                            document.getElementById("idCitaModal").value =
+                                    this.dataset.id;
+
+                            document.getElementById("clienteModal").textContent =
+                                    this.dataset.cliente;
+
+                            document.getElementById("servicioModal").textContent =
+                                    this.dataset.servicio;
+
+                            document.getElementById("fechaModal").textContent =
+                                    this.dataset.fecha;
+
+                            document.getElementById("horaModal").textContent =
+                                    this.dataset.hora;
+
+                            document.getElementById("estadoModal").value =
+                                    this.dataset.estado;
+                        });
+
+                    });
+
+                });
+            </script>
+            </section>
