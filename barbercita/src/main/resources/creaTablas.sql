@@ -129,8 +129,36 @@ create table pago (
   ENGINE = InnoDB;
 
 
--- Tabla de notificaciones y pagos se trabajara en el avance 3.
+-- Tabla de notificaciones y pagos se adelantan solo las entidades y relaciones, las demas capas se desarrollaran en Java en el avance 3..
+-- Tabla de notificaciones enviadas al usuario sobre sus citas
+create table notificacion (
+  id_notificacion INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  id_cita INT NULL,
+  descripcion VARCHAR(255) NOT NULL,
+  estado ENUM('Enviada', 'Fallida') NOT NULL,
+  fecha_envio DATETIME NOT NULL,
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_notificacion),
+  index ndx_usuario (id_usuario),
+  foreign key fk_notificacion_usuario (id_usuario) references usuario(id_usuario),
+  foreign key fk_notificacion_cita (id_cita) references cita(id_cita))
+  ENGINE = InnoDB;
 
+-- Tabla de tokens para recuperar la contraseña (fecha = cuándo vence el enlace)
+create table token_recuperacion (
+  id_token INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  token VARCHAR(100) NOT NULL UNIQUE,
+  estado ENUM('Activo', 'Usado', 'Vencido') NOT NULL,
+  fecha DATETIME NOT NULL,
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_token),
+  index ndx_usuario (id_usuario),
+  foreign key fk_token_usuario (id_usuario) references usuario(id_usuario))
+  ENGINE = InnoDB;
 
 -- --- Ingresamos datos de ejemplo ---
 
@@ -177,3 +205,5 @@ INSERT INTO cita (id_cliente,id_barbero,id_servicio,fecha,hora,estado,observacio
 -- Inserción de pagos (solo la cita 3, que ya fue atendida)
 INSERT INTO pago (id_cita,monto,metodo,comprobante,descripcion,fecha) VALUES
 (3, 5000, 'Efectivo', NULL, 'Corte Clasico', DATE_SUB(CURDATE(), INTERVAL 7 DAY));
+
+-- En el avance 3 se agregaran datos para notificacion y token/generacion de password.
