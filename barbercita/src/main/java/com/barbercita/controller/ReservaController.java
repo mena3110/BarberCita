@@ -114,7 +114,10 @@ public class ReservaController {
             redirectAttributes.addAttribute("barbero", barbero);
             redirectAttributes.addAttribute("fecha", fecha);
         }
-        //cuando exista la pagina de Mis citas se puede redirigir alla
+        // si la cita se guardo, el cliente la podra ver en "Mis citas"
+        if (titulo.equals("todoOk")) {
+            return "redirect:/cliente/citas";
+        }
         return "redirect:/cliente/reservar";
     }
 }

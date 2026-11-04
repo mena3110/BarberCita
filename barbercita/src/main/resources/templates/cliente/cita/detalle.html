@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos ::head}" ></head>
+    <body>
+        <header th:replace="~{general/fragmentos ::header}" ></header>
+
+        <!-- Detalle de una cita del cliente -->
+        <section th:replace="~{cliente/cita/fragmentos :: detalle}"></section>
+
+        <section th:replace="~{cliente/cita/fragmentos :: confirmarCancelar}"></section>
+        <section th:replace="~{general/fragmentos :: mostrarToast}" ></section>
+        <footer th:replace="~{general/fragmentos ::footer}" ></footer>
+    </body>
+</html>

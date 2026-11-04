@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<!-- Fragmento #1 muestra el estado de una cita con su color (los mismos colores de la agenda) -->
+<span th:fragment="estadoCita(estado)">
+    <span th:if="${estado == 'Pendiente'}" class="badge bg-warning text-dark">[[#{cita.estado.Pendiente}]]</span>
+    <span th:if="${estado == 'Atendida'}" class="badge bg-success">[[#{cita.estado.Atendida}]]</span>
+    <span th:if="${estado == 'Cancelada'}" class="badge bg-danger">[[#{cita.estado.Cancelada}]]</span>
+</span>
+
+<!-- Fragmento #2 lista de las proximas citas del cliente (HU-08), con las opciones de detalle y cancelar (HU-09) -->
+<section th:fragment="proximas" class="caja-gris p-4 mb-4">
+    <h5 class="titulo mb-3">[[#{miscitas.proximas}]]</h5>
+    <div th:if="${citas == null or citas.empty}" class="text-secondary">[[#{miscitas.sinProximas}]]</div>
+    <div class="table-responsive" th:if="${citas != null and !citas.empty}">
+        <table class="table table-sm align-middle mb-2">
+            <thead>
+                <tr>
+                    <th>[[#{miscitas.servicio}]]</th>
+                    <th>[[#{miscitas.fecha}]]</th>
+                    <th>[[#{miscitas.hora}]]</th>
+                    <th>[[#{miscitas.barbero}]]</th>
+                    <th>[[#{miscitas.precio}]]</th>
+                    <th>[[#{miscitas.estado}]]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${citas}">
+                    <td>[[${c.servicio.nombre}]]</td>
+                    <td>[[${#temporals.format(c.fecha, 'dd/MM/yyyy')}]]</td>
+                    <td>[[${#temporals.format(c.hora, 'HH:mm')}]]</td>
+                    <td>[[${c.barbero.usuario.nombre}]]</td>
+                    <td>₡[[${#numbers.formatDecimal(c.servicio.precio, 1, 'POINT', 0, 'COMMA')}]]</td>
+                    <td><span th:replace="~{cliente/cita/fragmentos :: estadoCita(${c.estado})}"></span></td>
+                    <td class="text-end text-nowrap">
+                        <a th:href="@{/cliente/citas/detalle/}+${c.idCita}" class="btn btn-sm btn-outline-dark">
+                            <i class="fa-solid fa-eye"></i> [[#{miscitas.detalle}]]</a>
+                        <button type="button" class="btn btn-sm btn-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmModal"
+                                th:attr="data-bs-id=${c.idCita},data-bs-descripcion=${c.servicio.nombre} + ' (' + ${#temporals.format(c.fecha, 'dd/MM/yyyy')} + ' ' + ${#temporals.format(c.hora, 'HH:mm')} + ')'">
+                            <i class="fa-solid fa-calendar-xmark"></i> [[#{miscitas.cancelar}]]
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <small class="text-secondary"><i class="fa-regular fa-clock me-1"></i>[[#{miscitas.nota}]]</small>
+    </div>
+</section>
+
+<!-- Fragmento #3 historial con las demas citas del cliente -->
+<section th:fragment="historial" class="caja-gris p-4">
+    <h5 class="titulo mb-3">[[#{miscitas.historial}]]</h5>
+    <div th:if="${historial == null or historial.empty}" class="text-secondary">[[#{miscitas.sinHistorial}]]</div>
+    <div class="table-responsive" th:if="${historial != null and !historial.empty}">
+        <table class="table table-sm align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>[[#{miscitas.servicio}]]</th>
+                    <th>[[#{miscitas.fecha}]]</th>
+                    <th>[[#{miscitas.barbero}]]</th>
+                    <th>[[#{miscitas.estado}]]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="h : ${historial}">
+                    <td>[[${h.servicio.nombre}]]</td>
+                    <td>[[${#temporals.format(h.fecha, 'dd/MM/yyyy')}]]</td>
+                    <td>[[${h.barbero.usuario.nombre}]]</td>
+                    <td><span th:replace="~{cliente/cita/fragmentos :: estadoCita(${h.estado})}"></span></td>
+                    <td class="text-end">
+                        <a th:href="@{/cliente/citas/detalle/}+${h.idCita}" class="btn btn-sm btn-outline-dark">
+                            <i class="fa-solid fa-eye"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Fragmento #4 tarjeta con la proxima cita y el boton para reservar otra -->
+<section th:fragment="proximaCita">
+    <div class="caja-beige p-4 mb-4">
+        <h5 class="titulo text-center mb-3">[[#{miscitas.proxima}]]</h5>
+        <div th:if="${proximaCita == null}" class="text-center text-secondary">[[#{miscitas.sinProximas}]]</div>
+        <div th:if="${proximaCita != null}">
+            <div class="d-flex justify-content-between fw-bold mb-3">
+                <span>[[${proximaCita.servicio.nombre}]]</span>
+                <span th:replace="~{cliente/cita/fragmentos :: estadoCita(${proximaCita.estado})}"></span>
+            </div>
+            <p class="mb-1"><i class="fa-regular fa-user me-2"></i>[[#{miscitas.barbero}]]: [[${proximaCita.barbero.usuario.nombre}]]</p>
+            <p class="mb-1 text-capitalize"><i class="fa-regular fa-calendar me-2"></i>[[${#temporals.format(proximaCita.fecha, 'EEEE d MMMM')}]]</p>
+            <p class="mb-1"><i class="fa-regular fa-clock me-2"></i>[[${#temporals.format(proximaCita.hora, 'HH:mm')}]] · [[${proximaCita.servicio.duracionMin}]] min</p>
+            <p class="fw-bold mb-0">₡[[${#numbers.formatDecimal(proximaCita.servicio.precio, 1, 'POINT', 0, 'COMMA')}]]</p>
+        </div>
+    </div>
+    <div class="text-end">
+        <a th:href="@{/cliente/reservar}" class="btn btn-navaja px-4">
+            [[#{miscitas.reservar}]] <i class="fa-solid fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+</section>
+
+<!-- Fragmento #5 detalle de una cita -->
+<section th:fragment="detalle" class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="caja-beige p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="titulo mb-0">[[#{detalle.titulo}]]</h4>
+                    <span th:replace="~{cliente/cita/fragmentos :: estadoCita(${cita.estado})}"></span>
+                </div>
+                <dl class="row mb-0">
+                    <dt class="col-5">[[#{miscitas.servicio}]]</dt>
+                    <dd class="col-7">[[${cita.servicio.nombre}]]</dd>
+                    <dt class="col-5">[[#{miscitas.barbero}]]</dt>
+                    <dd class="col-7">[[${cita.barbero.usuario.nombre}]]</dd>
+                    <dt class="col-5">[[#{miscitas.fecha}]]</dt>
+                    <dd class="col-7 text-capitalize">[[${#temporals.format(cita.fecha, 'EEEE d MMMM yyyy')}]]</dd>
+                    <dt class="col-5">[[#{miscitas.hora}]]</dt>
+                    <dd class="col-7">[[${#temporals.format(cita.hora, 'HH:mm')}]]</dd>
+                    <dt class="col-5">[[#{detalle.duracion}]]</dt>
+                    <dd class="col-7">[[${cita.servicio.duracionMin}]] min</dd>
+                    <dt class="col-5">[[#{miscitas.precio}]]</dt>
+                    <dd class="col-7">₡[[${#numbers.formatDecimal(cita.servicio.precio, 1, 'POINT', 0, 'COMMA')}]]</dd>
+                    <dt class="col-5">[[#{detalle.observaciones}]]</dt>
+                    <dd class="col-7" th:text="${cita.observaciones} ?: '-'"></dd>
+                </dl>
+                <!-- Si el barbero ya registro el pago (HU-16) se muestra el metodo y el monto -->
+                <div th:if="${pago != null}" class="border-top pt-3 mt-2">
+                    <h6 class="titulo">[[#{detalle.pago}]]</h6>
+                    <dl class="row mb-0">
+                        <dt class="col-5">[[#{pago.metodo}]]</dt>
+                        <dd class="col-7">[[#{${'pago.metodo.' + pago.metodo}}]]</dd>
+                        <dt class="col-5">[[#{pago.monto}]]</dt>
+                        <dd class="col-7">₡[[${#numbers.formatDecimal(pago.monto, 1, 'POINT', 0, 'COMMA')}]]</dd>
+                        <dt class="col-5">[[#{miscitas.fecha}]]</dt>
+                        <dd class="col-7">[[${#temporals.format(pago.fecha, 'dd/MM/yyyy')}]]</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+                <a th:href="@{/cliente/citas}" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left me-1"></i>[[#{detalle.volver}]]</a>
+                <!-- Solo las citas pendientes se pueden cancelar -->
+                <button type="button" class="btn btn-danger" th:if="${cita.estado == 'Pendiente'}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#confirmModal"
+                        th:attr="data-bs-id=${cita.idCita},data-bs-descripcion=${cita.servicio.nombre} + ' (' + ${#temporals.format(cita.fecha, 'dd/MM/yyyy')} + ' ' + ${#temporals.format(cita.hora, 'HH:mm')} + ')'">
+                    <i class="fa-solid fa-calendar-xmark"></i> [[#{miscitas.cancelar}]]
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Fragmento #6 ventana modal para confirmar antes de cancelar una cita (HU-09) -->
+<!-- Usa los mismos id del modal de eliminar, asi rutinas.js le pasa el id y la descripcion de la cita -->
+<section th:fragment="confirmarCancelar">
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/cliente/citas/cancelar}" method="post">
+                    <input type="hidden" name="idCita" id="modalId"/>
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="modalLabel"><i class="fa-solid fa-triangle-exclamation"></i> [[#{cancelar.titulo}]]</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>[[#{cancelar.texto1}]] <strong id="modalDescripcion"></strong>?</p>
+                        <h6>[[#{cancelar.texto2}]]</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger"><i class="fa-solid fa-calendar-xmark"></i> [[#{cancelar.boton}]]</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
