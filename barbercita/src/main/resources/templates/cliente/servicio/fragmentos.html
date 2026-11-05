@@ -1,0 +1,55 @@
+
+<!-- Fragmento para el listado de servicios-->
+<section th:fragment="listado">
+    <div class="container mt-4">
+        <div class="text-center mb-5">
+            <h2>Nuestros Servicios</h2>
+            <p class="text-muted">
+                Elegí el servicio que deseas y reserva tu cita.
+            </p>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4"
+                 th:each="servicio : ${servicios}">
+                <div class="card h-100 shadow-sm">
+                    <img th:if="${servicio.imagenUrl != null}"
+                         th:src="@{${servicio.imagenUrl}}"
+                         class="card-img-top"
+                         alt="Servicio">
+                    <div class="card-body">
+                        <h5 class="card-title"
+                            th:text="${servicio.nombre}">
+                            Nombre
+                        </h5>
+                        <p class="card-text"
+                           th:text="${servicio.descripcion}">
+                            Descripción
+                        </p>
+                        <p>
+                            <strong>Precio:</strong>
+                            ₡<span th:text="${servicio.precio}"></span>
+                        </p>
+                        <p>
+                            <strong>Duración:</strong>
+                            <span th:text="${servicio.duracionMin}"></span>
+                            min
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+
+                        <a class="btn btn-success"
+                           th:href="@{/cliente/reservar(servicio=${servicio.idServicio})}">
+                            Reservar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+</body>
+</html>
+
+
