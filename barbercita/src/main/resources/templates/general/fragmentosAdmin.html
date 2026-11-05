@@ -1,0 +1,29 @@
+<!-- Menu del Admin  -->
+<header th:fragment="headerAdmin" class="encabezado pt-3 pb-2">
+    <div class="container text-center">
+        <a th:href="@{/}"><img th:src="@{/img/logo.png}" alt="Navaja Barber Studio" class="logo"/></a>
+        <nav class="navbar navbar-expand-md p-0">
+            <button class="navbar-toggler mx-auto mt-2" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">[[#{plantilla.inicio}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/agenda}">[[#{plantilla.agenda}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/servicio/listado}">[[#{plantilla.servicios}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/barberos}">[[#{plantilla.barberos}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/reportes}">[[#{plantilla.reportes}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/cerrarsesion}">[[#{plantilla.cerrarSesion}]]</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                            <i class="fa-solid fa-globe"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/(lang=es)}">Español</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(lang=en)}">English</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>

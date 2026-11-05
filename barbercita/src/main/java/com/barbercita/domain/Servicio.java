@@ -50,5 +50,5 @@ public class Servicio implements Serializable {
     private String imagenUrl;
 
     @Column(nullable = false)
-    private boolean activo;
+    private boolean activo = true;
 }
