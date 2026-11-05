@@ -11,7 +11,11 @@
                     <li class="nav-item"><a class="nav-link" th:href="@{/}">[[#{plantilla.inicio}]]</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/barbero/agenda}">[[#{plantilla.miagenda}]]</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/barbero/perfil}">[[#{plantilla.perfil}]]</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/cerrarsesion}">[[#{plantilla.cerrarSesion}]]</a></li>
+                    <li class="nav-item">
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="nav-link btn btn-link">[[#{plantilla.cerrarSesion}]]</button>
+                        </form>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                             <i class="fa-solid fa-globe"></i></a>

@@ -83,7 +83,8 @@
                      th:data-servicio="${cita.servicio.nombre}"
                      th:data-fecha="${#temporals.format(cita.fecha,'dd/MM/yyyy')}"
                      th:data-hora="${cita.hora}"
-                     th:data-estado="${cita.estado}">
+                     th:data-estado="${cita.estado}"
+                     th:data-pago="@{/barbero/pago/registrar/{id}(id=${cita.idCita})}">
 
                     <div class="card mb-3 shadow-sm">
                         <div class="card-body">
@@ -189,7 +190,11 @@
                         </div>
 
                         <div class="modal-footer">
-
+                            
+                            <a id="pagoModal" href="#" class="btn btn-navaja d-none">
+                                <i class="fa-solid fa-cash-register"></i> [[#{agenda.registrarPago}]]
+                            </a>
+                            
                             <button type="button"
                                     class="btn btn-secondary"
                                     data-bs-dismiss="modal">
@@ -233,6 +238,11 @@
 
                             document.getElementById("estadoModal").value =
                                     this.dataset.estado;
+                            
+                            // el boton de pago solo se muestra si la cita esta Pendiente
+                            const pago = document.getElementById("pagoModal");
+                            pago.href = this.dataset.pago;
+                            pago.classList.toggle("d-none", this.dataset.estado !== "Pendiente");
                         });
 
                     });
