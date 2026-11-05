@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<!-- Fragmento #1 resumen de la cita y formulario del pago -->
+<section th:fragment="formulario" class="container py-5">
+    <div class="text-center mb-4">
+        <h2 class="titulo">[[#{pago.titulo}]]</h2>
+        <small>[[#{pago.subtitulo}]]</small>
+    </div>
+    <div class="row justify-content-center g-4">
+        <!-- Resumen de la cita -->
+        <div class="col-lg-4">
+            <div class="caja-verde p-4 h-100">
+                <h5 class="titulo mb-3">[[#{pago.cita}]]</h5>
+                <p class="mb-1"><strong>[[#{pago.cliente}]]:</strong> [[${cita.cliente.nombre}]]</p>
+                <p class="mb-1"><strong>[[#{miscitas.servicio}]]:</strong> [[${cita.servicio.nombre}]]</p>
+                <p class="mb-1"><strong>[[#{miscitas.fecha}]]:</strong> [[${#temporals.format(cita.fecha, 'dd/MM/yyyy')}]]</p>
+                <p class="mb-1"><strong>[[#{miscitas.hora}]]:</strong> [[${#temporals.format(cita.hora, 'HH:mm')}]]</p>
+                <p class="mb-0"><strong>[[#{miscitas.precio}]]:</strong>
+                    ₡[[${#numbers.formatDecimal(cita.servicio.precio, 1, 'POINT', 0, 'COMMA')}]]</p>
+            </div>
+        </div>
+        <!-- Formulario del pago -->
+        <div class="col-lg-5">
+            <div class="panel-pago shadow-sm p-4">
+                <form th:action="@{/barbero/pago/guardar}" th:object="${pago}" method="post">
+                    <input type="hidden" name="idCita" th:value="${cita.idCita}"/>
+                    <div class="mb-3">
+                        <label for="monto" class="form-label">[[#{pago.monto}]]</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₡</span>
+                            <input type="number" class="form-control" th:field="*{monto}"
+                                   min="1" step="0.01" required="true"/>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="metodo" class="form-label">[[#{pago.metodo}]]</label>
+                        <select class="form-select" th:field="*{metodo}" onchange="mostrarComprobante()">
+                            <option th:each="m : ${metodos}" th:value="${m}"
+                                    th:text="#{${'pago.metodo.' + m}}"></option>
+                        </select>
+                    </div>
+                    <!-- Solo se pide para SINPE o Tarjeta ( y rutinas.js lo muestra o lo oculta -->
+                    <div class="mb-3" id="cajaComprobante">
+                        <label for="comprobante" class="form-label">[[#{pago.comprobante}]]</label>
+                        <input type="text" class="form-control" th:field="*{comprobante}" maxlength="50"/>
+                        <small class="text-secondary">[[#{pago.comprobante.ayuda}]]</small>
+                    </div>
+                    <small class="d-block text-secondary mb-3">
+                        <i class="fa-solid fa-circle-info me-1"></i>[[#{pago.nota}]]
+                    </small>
+                    <div class="d-flex justify-content-between">
+                        <a th:href="@{/barbero/agenda}" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left me-1"></i>[[#{pago.volver}]]</a>
+                        <button type="submit" class="btn btn-navaja px-4">
+                            <i class="fa-solid fa-cash-register me-1"></i>[[#{pago.guardar}]]
+                        </button>
