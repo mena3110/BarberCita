@@ -1,0 +1,135 @@
+/* Colores y letra del prototipo de Figma - Navaja Barber Studio */
+body {
+    background-color: #ecebe9;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #1e1e1e;
+}
+
+/* encabezado gris claro con el logo en el centro */
+.encabezado { background-color: #dedad7; }
+.encabezado .nav-link { color: #222; padding: 4px 22px !important; }
+.encabezado .nav-link:hover { font-weight: bold; }
+.logo { height: 55px; }
+
+/* pie de pagina */
+.pie { background-color: #dedad7; font-size: 14px; }
+
+/* portada del inicio (se oscurece un poco la foto para que se lea el texto) */
+.portada {
+    background: linear-gradient(rgba(0, 0, 0, .35), rgba(0, 0, 0, .35)),
+                url('/img/portada.jpg') center / cover no-repeat;
+    min-height: 75vh;
+    color: #fff;
+}
+.portada h1 { text-shadow: 0 2px 6px rgba(0, 0, 0, .7); font-weight: bold; }
+
+/* banner de nosotros en blanco y negro como en el Figma */
+.banner {
+    background: url('/img/banner-nosotros.png') center / cover no-repeat;
+    height: 280px;
+    filter: grayscale(100%);
+}
+.caja-verde { background-color: #9cb48a; border-radius: 8px; }
+.caja-beige { background-color: #c9c3b6; border-radius: 8px; }
+
+/* botones verdes del prototipo */
+.btn-navaja {
+    background-color: #9cb48a;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+}
+.btn-navaja:hover { background-color: #87a274; color: #1e1e1e; }
+
+.titulo { font-weight: bold; }
+.tarjeta { background-color: #fff; border-radius: 10px; }
+
+/* cajas de mision, vision y filosofia como en el Figma */
+.caja-nosotros {
+    width: 75%;
+    min-height: 180px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+
+/* pantalla de reserva (panel oscuro del prototipo de Figma) */
+.fondo-reserva { background-color: #b0aa9f; }
+.panel-reserva { background-color: #141613; color: #eee; border-radius: 12px; overflow: hidden; }
+.panel-reserva .opcion {
+    display: block;
+    border: 1px solid #3b3f38;
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: #eee;
+    text-decoration: none;
+    height: 100%;
+}
+.panel-reserva .opcion:hover { border-color: #9cb48a; }
+.panel-reserva .opcion.elegida { border-color: #9cb48a; background-color: #2b3326; }
+.panel-reserva .hora.elegida { background-color: #9cb48a; color: #111; }
+.panel-reserva .paso { font-size: 12px; letter-spacing: 1px; color: #aaa; text-transform: uppercase; }
+.panel-reserva .text-secondary { color: #a8a8a8 !important; }
+.panel-reserva .precio { color: #9cb48a; font-weight: bold; }
+.panel-reserva .dia { min-width: 70px; }
+.panel-reserva .total { font-size: 24px; font-weight: bold; }
+.panel-reserva .etiqueta { font-size: 10px; letter-spacing: 1px; color: #aaa; text-transform: uppercase; display: block; }
+.panel-reserva .icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #2b3326;
+    color: #9cb48a;
+    margin-right: 10px;
+}
+.resumen { border-left: 1px solid #3b3f38; }
+
+/* columna izquierda con la foto y nuestro enfoque */
+.enfoque { background-color: #0d0e0c; border-right: 1px solid #3b3f38; }
+.enfoque img { width: 100%; height: 220px; object-fit: cover; }
+.enfoque h4 { font-weight: bold; }
+
+/* Persona 1: pantalla de login con el mismo panel oscuro de la reserva */
+.contenedor-login { max-width: 900px; }
+.contenedor-denegado { max-width: 560px; }
+.panel-login .enfoque img { height: 260px; }
+.panel-login .input-group-text {
+    background-color: #2b3326;
+    border-color: #3b3f38;
+    color: #9cb48a;
+}
+.panel-login .form-control {
+    background-color: #0d0e0c;
+    border-color: #3b3f38;
+    color: #eee;
+}
+.panel-login .form-control::placeholder { color: #777; }
+.panel-login .form-control:focus {
+    border-color: #9cb48a;
+    box-shadow: 0 0 0 .2rem rgba(156, 180, 138, .25);
+}
+/* mensajes del login */
+.panel-login .aviso { border-radius: 8px; padding: 8px 12px; font-size: 14px; }
+.panel-login .aviso-error { border: 1px solid #b85c5c; background-color: #2e1a1a; color: #f0b4b4; }
+.panel-login .aviso-ok { border: 1px solid #9cb48a; background-color: #2b3326; color: #cfe0c2; }
+.panel-login .icono-grande {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #2b3326;
+    color: #9cb48a;
+    font-size: 26px;
+}
+
+/* foto pequena del usuario en el menu */
+.foto-usuario { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }

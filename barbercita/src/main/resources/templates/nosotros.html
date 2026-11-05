@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos ::head}" ></head>
+    <body>
+        <header th:replace="~{general/fragmentos ::header}" ></header>
+
+        <div class="banner"></div>
+
+        <section class="container text-center py-4">
+            <h2 class="titulo mb-5">[[#{nosotros.titulo}]]</h2>
+            <div class="row g-4 justify-content-center pb-4">
+                <div class="col-md-4">
+                    <h4 class="titulo mb-4">[[#{nosotros.mision}]]</h4>
+                    <div class="caja-verde caja-nosotros">[[#{nosotros.mision.texto}]]</div>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="titulo mb-4">[[#{nosotros.vision}]]</h4>
+                    <div class="caja-beige caja-nosotros">[[#{nosotros.vision.texto}]]</div>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="titulo mb-4">[[#{nosotros.filosofia}]]</h4>
+                    <div class="caja-verde caja-nosotros">[[#{nosotros.filosofia.texto}]]</div>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="~{general/fragmentos ::footer}" ></footer>
+    </body>
+</html>
