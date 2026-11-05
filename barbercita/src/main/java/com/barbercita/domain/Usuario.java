@@ -39,7 +39,7 @@ public class Usuario implements Serializable {
     @Column(nullable = false)
     private boolean activo;
 
-    //Persona 1 agrega aqui el rol, el password y la foto para el login
+    //agrega aqui el rol, el password y la foto para el login
 
     //Rol del usuario: CLIENTE, BARBERO o ADMIN
     @Column(length = 20)

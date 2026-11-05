@@ -25,13 +25,16 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" th:href="@{/}">[[#{plantilla.inicio}]]</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">[[#{plantilla.nosotros}]]</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/servicios}">[[#{plantilla.servicios}]]</a></li>
+                    <!-- Opcion solo para el barbero: su agenda del dia -->
+                    <li class="nav-item" sec:authorize="hasRole('BARBERO')"><a class="nav-link" th:href="@{/barbero/agenda}">[[#{plantilla.miagenda}]]</a></li>
+                    <!-- Nosotros y Servicios son del menu principal del cliente, el barbero no los ve -->
+                    <li class="nav-item" sec:authorize="!hasRole('BARBERO')"><a class="nav-link" th:href="@{/nosotros}">[[#{plantilla.nosotros}]]</a></li>
+                    <li class="nav-item" sec:authorize="!hasRole('BARBERO')"><a class="nav-link" th:href="@{/servicios}">[[#{plantilla.servicios}]]</a></li>
                     <!-- Mis citas solo para clientes (o para invitar a iniciar sesion) -->
                     <li class="nav-item" sec:authorize="isAnonymous() or hasRole('CLIENTE')"><a class="nav-link" th:href="@{/cliente/citas}">[[#{plantilla.miscitas}]]</a></li>
                     <!-- Opcion solo para el administrador -->
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:href="@{/admin/servicio/listado}">[[#{plantilla.admin}]]</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">[[#{plantilla.contacto}]]</a></li>
+                    <li class="nav-item" sec:authorize="!hasRole('BARBERO')"><a class="nav-link" th:href="@{/contacto}">[[#{plantilla.contacto}]]</a></li>
                     <!-- Si no ha iniciado sesion se muestra el enlace al login -->
                     <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" th:href="@{/login}">[[#{plantilla.iniciarSesion}]]</a></li>
                     <!-- Si ya inicio sesion se muestra su nombre y la opcion de salir -->

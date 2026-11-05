@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-//Persona 1: configuracion del login y de los permisos segun el rol
+//configuracion del login y de los permisos segun el rol
 @Configuration
 public class SecurityConfig {
 
@@ -19,7 +19,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+            LoginExitosoHandler loginExitosoHandler) throws Exception {
         http
                 //Permisos de cada ruta segun el rol
                 .authorizeHttpRequests(request -> request
@@ -34,7 +35,8 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .usernameParameter("correo")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/", false)
+                        //Despues de iniciar sesion se envia a cada usuario al area de su rol
+                        .successHandler(loginExitosoHandler)
                         //Si el usuario esta inactivo se muestra otro mensaje
                         .failureHandler((request, response, exception) -> {
                             if (exception instanceof DisabledException) {

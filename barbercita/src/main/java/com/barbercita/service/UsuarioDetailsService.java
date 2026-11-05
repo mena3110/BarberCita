@@ -32,15 +32,24 @@ public class UsuarioDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("El usuario " + correo + " no tiene contrasena o rol");
         }
 
+        //El rol se limpia de espacios y se pasa a mayusculas (ej: "barbero " -> "BARBERO")
+        String rol = usuario.getRol().trim().toUpperCase();
+
+        //Solo se aceptan los tres roles del sistema, si el rol esta mal escrito se avisa en vez de entrar con otro rol
+        if (!rol.equals("CLIENTE") && !rol.equals("BARBERO") && !rol.equals("ADMIN")) {
+            throw new UsernameNotFoundException("El usuario " + correo + " tiene un rol no valido: " + rol);
+        }
+
         //Guardar el nombre y la foto en la sesion para mostrarlos en el menu
         session.setAttribute("usuarioNombre", usuario.getNombre());
         session.setAttribute("usuarioFoto", usuario.getFoto());
 
         //Se arma el usuario de Spring con su rol y si esta activo o no
+        //roles("BARBERO") crea la autoridad ROLE_BARBERO, que es la que revisa hasRole("BARBERO")
         return User.builder()
                 .username(usuario.getCorreo())
                 .password(usuario.getPassword())
-                .roles(usuario.getRol().toUpperCase())
+                .roles(rol)
                 .disabled(!usuario.isActivo())
                 .build();
     }
