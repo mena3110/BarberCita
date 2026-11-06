@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head th:replace="~{general/fragmentos ::head}" ></head>
     <body>
-        <header th:replace="~{general/fragmentos ::header}" ></header>
+        <header th:replace="${#authorization.expression('hasRole(''BARBERO'')')} ? ~{general/fragmentosBarbero :: headerBarbero} : (${#authorization.expression('hasRole(''ADMIN'')')} ? ~{general/fragmentosAdmin :: headerAdmin} : ~{general/fragmentos :: header})"></header>
 
         <!-- Portada del inicio segun el prototipo -->
         <section class="portada d-flex flex-column justify-content-center align-items-center text-center">

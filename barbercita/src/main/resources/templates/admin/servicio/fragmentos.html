@@ -1,0 +1,243 @@
+<!-- Fragmento formulario para crear o modificar servicios -->
+<section th:fragment="formulario">
+    <div class="modal fade"
+         id="modalServicio"
+         tabindex="-1"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form th:action="@{/admin/servicio/guardar}"
+                      method="post"
+                      enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Servicio
+                        </h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden"
+                               id="idServicio"
+                               name="idServicio">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Nombre
+                            </label>
+                            <input type="text"
+                                   id="nombre"
+                                   class="form-control"
+                                   name="nombre"
+                                   required>
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Descripción
+                                </label>
+                                <textarea id="descripcion"
+                                          class="form-control"
+                                          name="descripcion"
+                                          rows="3">
+                                </textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Precio
+                                    </label>
+                                    <input type="number"
+                                           id="precio"
+                                           step="0.01"
+                                           min="0"
+                                           class="form-control"
+                                           name="precio"
+                                           required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Duración (minutos)
+                                    </label>
+                                    <input type="number"
+                                           id="duracionMin"
+                                           min="1"
+                                           class="form-control"
+                                           name="duracionMin"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <label class="form-label">
+                                    Imagen
+                                </label>
+                                <input type="file"
+                                       class="form-control"
+                                       name="imagenFile"
+                                       accept="image/*">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                    class="btn btn-success">
+                                Guardar
+                            </button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Fragmento para el listado de servicios-->
+<section th:fragment="listado">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Gestión de Servicios</h2>
+            <button class="btn btn-dark"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalServicio">
+                Nuevo Servicio
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4"
+                 th:each="servicio : ${servicios}">
+                <div class="card h-100 shadow-sm">
+                    <img th:if="${servicio.imagenUrl != null}"
+                         th:src="@{${servicio.imagenUrl}}"
+                         class="card-img-top"
+                         alt="Servicio">
+                    <div class="card-body">
+                        <h5 class="card-title"
+                            th:text="${servicio.nombre}">
+                            Nombre
+                        </h5>
+                        <p class="card-text"
+                           th:text="${servicio.descripcion}">
+                            Descripción
+                        </p>
+                        <p>
+                            <strong>Precio:</strong>
+                            ₡<span th:text="${servicio.precio}"></span>
+                        </p>
+                        <p>
+                            <strong>Duración:</strong>
+                            <span th:text="${servicio.duracionMin}"></span>
+                            min
+                        </p>
+                        <p>
+
+                            <strong>Estado:</strong>
+
+                            <span th:if="${servicio.activo}"
+                                  class="badge bg-success">
+                                Activo
+                            </span>
+
+                            <span th:unless="${servicio.activo}"
+                                  class="badge bg-secondary">
+                                Inactivo
+                            </span>
+
+                        </p>
+
+                    </div>
+                    <div class="card-footer d-flex justify-content-center gap-2">
+                        <button class="btn btn-primary btn-sm btn-editar"
+
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalServicio"
+
+                                th:data-id="${servicio.idServicio}"
+                                th:data-nombre="${servicio.nombre}"
+                                th:data-descripcion="${servicio.descripcion}"
+                                th:data-precio="${servicio.precio}"
+                                th:data-duracion="${servicio.duracionMin}"
+                                th:data-imagen="${servicio.imagenUrl}">
+
+                            Editar
+
+                        </button>
+                        <!-- Si está activo -->
+                        <form th:if="${servicio.activo}"
+                              th:action="@{/admin/servicio/eliminar}"
+                              method="post"
+                              onsubmit="return confirm('¿Desea desactivar este servicio?');">
+
+                            <input type="hidden"
+                                   name="idServicio"
+                                   th:value="${servicio.idServicio}">
+
+                            <button type="submit"
+                                    class="btn btn-danger btn-sm">
+                                Desactivar
+                            </button>
+
+                        </form>
+
+                        <!-- Si está inactivo -->
+                        <form th:unless="${servicio.activo}"
+                              th:action="@{/admin/servicio/activar}"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="idServicio"
+                                   th:value="${servicio.idServicio}">
+
+                            <button type="submit"
+                                    class="btn btn-success btn-sm">
+                                Activar
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+
+                btn.addEventListener('click', function () {
+
+                    document.getElementById('idServicio').value =
+                            this.dataset.id;
+
+                    document.getElementById('nombre').value =
+                            this.dataset.nombre;
+
+                    document.getElementById('descripcion').value =
+                            this.dataset.descripcion;
+
+                    document.getElementById('precio').value =
+                            this.dataset.precio;
+
+                    document.getElementById('duracionMin').value =
+                            this.dataset.duracion;
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+</section>
+
+</body>
+</html>
+
+

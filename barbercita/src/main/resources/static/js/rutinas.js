@@ -36,3 +36,16 @@ document.addEventListener('DOMContentLoaded', function () {
             toast.classList.remove('show'));
     }, 4000);
 });
+
+//Para pagos, el numero de comprobante solo se pide para SINPE o Tarjeta - HU-16)
+function mostrarComprobante() {
+    const metodo = document.getElementById('metodo');
+    const caja = document.getElementById('cajaComprobante');
+    if (!metodo || !caja) {
+        return;
+    }
+    const ocupaComprobante = metodo.value !== 'Efectivo';
+    caja.classList.toggle('d-none', !ocupaComprobante);
+    document.getElementById('comprobante').required = ocupaComprobante;
+}
+document.addEventListener('DOMContentLoaded', mostrarComprobante);

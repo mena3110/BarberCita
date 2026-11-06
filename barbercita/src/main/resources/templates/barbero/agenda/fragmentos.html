@@ -1,0 +1,252 @@
+<section th:fragment="listado">
+    <div class="container mt-4">
+        <div class="text-center mb-4">
+            <h2>MI AGENDA</h2>
+            <p class="text-muted">
+                Detalle de las citas agendadas para el día
+            </p>
+            <div class="text-end mb-3">
+                <form method="get"
+                      th:action="@{/barbero/agenda}">
+                    <input type="date"
+                           name="fecha"
+                           class="form-control d-inline-block w-auto"
+                           th:value="${fechaSeleccionada}">
+
+                    <button type="submit"
+                            class="btn btn-dark btn-sm">
+                        Consultar
+                    </button>
+                </form>
+            </div>
+
+        </div>
+        <div class="row">
+            <!-- Próxima cita -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm bg-success-subtle">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Próxima cita
+                        </h5>
+                        <div th:if="${!citas.isEmpty()}">
+                            <h4 th:text="${citas[0].hora}">
+                                10:00
+                            </h4>
+                            <p>
+                                <strong>Cliente:</strong>
+                                <span th:text="${citas[0].cliente.nombre}">
+                                </span>
+                            </p>
+                            <p>
+                                <strong>Servicio:</strong>
+                                <span th:text="${citas[0].servicio.nombre}">
+                                </span>
+                            </p>
+                            <p>
+                                <strong>Estado:</strong>
+                                <span th:text="${citas[0].estado}">
+                                </span>
+                            </p>
+                        </div>
+                        <div th:if="${citas.isEmpty()}">
+                            <p>No hay citas programadas para el día seleccionado.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agenda del día -->
+            <div class="col-md-8">
+                <!-- Encabezados -->
+                <div class="row fw-bold text-muted mb-2 px-3">
+                    <div class="col-md-2">
+                        Hora
+                    </div>
+                    <div class="col-md-4">
+                        Cliente
+                    </div>
+                    <div class="col-md-3">
+                        Servicio
+                    </div>
+                    <div class="col-md-3 text-end">
+                        Estado
+                    </div>
+                </div>
+                <div th:each="cita : ${citas}"
+                     class="fila-cita"
+                     data-bs-toggle="modal"
+                     data-bs-target="#modalCita"
+
+                     th:data-id="${cita.idCita}"
+                     th:data-cliente="${cita.cliente.nombre}"
+                     th:data-servicio="${cita.servicio.nombre}"
+                     th:data-fecha="${#temporals.format(cita.fecha,'dd/MM/yyyy')}"
+                     th:data-hora="${cita.hora}"
+                     th:data-estado="${cita.estado}"
+                     th:data-pago="@{/barbero/pago/registrar/{id}(id=${cita.idCita})}">
+
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <strong th:text="${cita.hora}">
+                                    </strong>
+                                </div>      
+                                <div class="col-md-4">
+                                    <span th:text="${cita.cliente.nombre}">
+                                        Cliente
+                                    </span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span th:text="${cita.servicio.nombre}">
+                                        Servicio
+                                    </span>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <span th:if="${cita.estado == 'Pendiente'}"
+                                          class="badge bg-warning text-dark">
+                                        Pendiente
+                                    </span>
+                                    <span th:if="${cita.estado == 'Atendida'}"
+                                          class="badge bg-success">
+                                        Atendida
+                                    </span>
+                                    <span th:if="${cita.estado == 'Cancelada'}"
+                                          class="badge bg-danger">
+                                        Cancelada
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>  
+        <div class="modal fade"
+             id="modalCita"
+             tabindex="-1"
+             aria-hidden="true">
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Detalle de la cita
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                        </button>
+                    </div>
+
+                   <form th:action="@{/barbero/agenda/cita/actualizarEstado}" method="post">
+
+
+                        <input type="hidden"
+                               id="idCitaModal"
+                               name="idCita">
+
+                        <div class="modal-body">
+
+                            <p>
+                                <strong>Cliente:</strong>
+                                <span id="clienteModal"></span>
+                            </p>
+
+                            <p>
+                                <strong>Servicio:</strong>
+                                <span id="servicioModal"></span>
+                            </p>
+
+                            <p>
+                                <strong>Fecha:</strong>
+                                <span id="fechaModal"></span>
+                            </p>
+
+                            <p>
+                                <strong>Hora:</strong>
+                                <span id="horaModal"></span>
+                            </p>
+
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Estado
+                                </label>
+
+                                <select id="estadoModal"
+                                        name="estado"
+                                        class="form-select">
+
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Atendida">Atendida</option>
+                                    <option value="Cancelada">Cancelada</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            
+                            <a id="pagoModal" href="#" class="btn btn-navaja d-none">
+                                <i class="fa-solid fa-cash-register"></i> [[#{agenda.registrarPago}]]
+                            </a>
+                            
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                Cerrar
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+
+                    const filas = document.querySelectorAll(".fila-cita");
+
+                    filas.forEach(fila => {
+
+                        fila.addEventListener("click", function () {
+
+                            document.getElementById("idCitaModal").value =
+                                    this.dataset.id;
+
+                            document.getElementById("clienteModal").textContent =
+                                    this.dataset.cliente;
+
+                            document.getElementById("servicioModal").textContent =
+                                    this.dataset.servicio;
+
+                            document.getElementById("fechaModal").textContent =
+                                    this.dataset.fecha;
+
+                            document.getElementById("horaModal").textContent =
+                                    this.dataset.hora;
+
+                            document.getElementById("estadoModal").value =
+                                    this.dataset.estado;
+                            
+                            // el boton de pago solo se muestra si la cita esta Pendiente
+                            const pago = document.getElementById("pagoModal");
+                            pago.href = this.dataset.pago;
+                            pago.classList.toggle("d-none", this.dataset.estado !== "Pendiente");
+                        });
+
+                    });
+
+                });
+            </script>
+            </section>

@@ -2,6 +2,7 @@ package com.barbercita.repository;
 
 import com.barbercita.domain.Barbero;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,6 @@ public interface BarberoRepository extends JpaRepository<Barbero, Integer> {
 
     //Barberos activos que pueden hacer un servicio (tabla barbero_servicio)
     public List<Barbero> findByActivoTrueAndServiciosIdServicio(Integer idServicio);
+    
+    public Optional<Barbero> findByUsuarioCorreo(String correo);
 }

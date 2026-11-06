@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos ::head}" ></head>
+    <body>
+        <header th:replace="~{general/fragmentos ::header}" ></header>
+
+        <!-- HU-08 Mis citas y HU-09 Cancelar una cita (pantalla Mis citas del prototipo de Figma) -->
+        <section class="container py-5">
+            <div class="text-center mb-4">
+                <h2 class="titulo">[[#{miscitas.titulo}]]</h2>
+                <small>[[#{miscitas.subtitulo}]]</small>
+            </div>
+            <div class="row g-4">
+                <!-- Izquierda - proximas citas e historial -->
+                <div class="col-lg-7">
+                    <section th:replace="~{cliente/cita/fragmentos :: proximas}"></section>
+                    <section th:replace="~{cliente/cita/fragmentos :: historial}"></section>
+                </div>
+                <!-- Derecha - proxima cita y boton para reservar -->
+                <div class="col-lg-5">
+                    <section th:replace="~{cliente/cita/fragmentos :: proximaCita}"></section>
+                </div>
+            </div>
+        </section>
+
+        <section th:replace="~{cliente/cita/fragmentos :: confirmarCancelar}"></section>
+        <section th:replace="~{general/fragmentos :: mostrarToast}" ></section>
+        <footer th:replace="~{general/fragmentos ::footer}" ></footer>
+    </body>
+</html>

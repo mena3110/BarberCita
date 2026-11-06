@@ -133,3 +133,11 @@ body {
 
 /* foto pequena del usuario en el menu */
 .foto-usuario { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
+
+/* Mis Citas */
+.caja-gris { background-color: #d9d9d9; border-radius: 10px; }
+.caja-gris .table, .caja-beige .table { --bs-table-bg: transparent; }
+.caja-gris .table th { font-weight: bold; border-bottom: 1px solid #9a9a9a; }
+
+/* Para formulario registrar pago */
+.panel-pago { background-color: #fff; border-radius: 10px; }
